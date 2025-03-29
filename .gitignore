@@ -1,0 +1,7 @@
+## Intellij
+.idea
+faster.iml
+
+## Node
+node_modules
+dist
