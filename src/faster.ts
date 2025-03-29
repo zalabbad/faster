@@ -30,7 +30,7 @@ findAllVideos(document).forEach(video => {
   };
 
   // Playback Rate Options
-  const playbackRates = [1, 1.25, 1.5, 1.75, 2];
+  const playbackRates = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3];
   playbackRates.forEach(rate => {
     const option = document.createElement('option');
     option.value = rate.toString();
