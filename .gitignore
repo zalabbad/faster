@@ -1,6 +1,6 @@
 ## Intellij
 .idea
-faster.iml
+*.iml
 
 ## Node
 node_modules
