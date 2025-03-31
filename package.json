@@ -4,11 +4,13 @@
   "devDependencies": {
     "nodemon": "^3.1.9",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "web-ext": "^8.5.0"
   },
   "scripts": {
     "watch": "nodemon --watch --ext ts --exec \"npm run format && npx tsc --watch\"",
     "format": "prettier --write \"src/**/*.ts\"",
+    "package": "web-ext build",
     "run:extension": "web-ext run"
   }
 }
