@@ -11,6 +11,6 @@
     "watch": "nodemon --watch --ext ts --exec \"npm run format && npx tsc --watch\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "package": "web-ext build",
-    "run:extension": "web-ext run"
+    "dev": "web-ext run"
   }
 }
