@@ -1,15 +1,33 @@
-const findAllVideos = (root: Document | ShadowRoot) => {
+type FasterVideo = {
+  video: HTMLVideoElement;
+  playbackRate: number;
+};
+
+let pageVideos: FasterVideo[] = [];
+
+const findVideos = (root: HTMLElement | ShadowRoot) => {
   const videos: HTMLVideoElement[] = [];
-  root.querySelectorAll('video').forEach(video => videos.push(video));
-  root.querySelectorAll('*').forEach(node => {
-    if (node.shadowRoot) {
-      videos.push(...findAllVideos(node.shadowRoot));
-    }
-  });
+  if ([1, 9, 11].includes(root.nodeType)) {
+    root.querySelectorAll('*').forEach(element => {
+      if (element.shadowRoot) {
+        videos.push(...findVideos(element.shadowRoot));
+      } else if (element.tagName === 'VIDEO') {
+        videos.push(element as HTMLVideoElement);
+      }
+    });
+  }
   return videos;
 };
 
-findAllVideos(document).forEach(video => {
+findVideos(document.body).forEach(video => trackVideo(video));
+
+
+function trackVideo(video: HTMLVideoElement) {
+
+  if (pageVideos.some(v => v.video === video)) {
+    return;
+  }
+
   const playbackRateSelector = document.createElement('select');
   // Playback Rate Selector Style
   playbackRateSelector.style.position = 'absolute';
@@ -47,4 +65,28 @@ findAllVideos(document).forEach(video => {
   video.parentElement.style.position = 'relative';
   // @ts-ignore
   video.parentElement.appendChild(playbackRateSelector);
+
+
+  pageVideos.push({
+    video,
+    playbackRate: 1
+  });
+}
+
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach(mutation => {
+    if (mutation.type === 'childList') {
+      mutation.addedNodes.forEach(node => {
+        findVideos(node as HTMLElement).forEach(video => trackVideo(video));
+      })
+    }
+  })
+})
+
+observer.observe(document.body, {
+childList: true,
+  subtree: true,
+  attributes: false,
+  attributeOldValue: false,
+  characterData: false
 });
